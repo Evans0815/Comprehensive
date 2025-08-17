@@ -9,6 +9,7 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Resource;
@@ -26,7 +27,9 @@ public class SpringBatchApplication {
 
     public static void main(String[] args) {
         ARGS = args;
-        SpringApplication.run(SpringBatchApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(SpringBatchApplication.class, args);
+        // 业务执行完毕，关闭上下文
+        context.close();
     }
 
     @Bean

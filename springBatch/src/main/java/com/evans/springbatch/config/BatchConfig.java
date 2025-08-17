@@ -2,6 +2,7 @@ package com.evans.springbatch.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.evans.springbatch.common.OriginTransaction;
+import com.evans.springbatch.mapper.OriginTransactionMapper;
 import com.evans.springbatch.mapper.TransactionMapper;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -39,8 +40,6 @@ import java.util.UUID;
 @EnableBatchProcessing
 public class BatchConfig {
 
-    @Value("${spring.batch.timeout}")
-    private int timeout;
     @Value("${spring.batch.chunk-size}")
     private int chunkSize;
     @Resource
@@ -51,6 +50,8 @@ public class BatchConfig {
     private BatchJobRepository batchJobRepository;
     @Resource
     private TransactionMapper transactionMapper;
+    @Resource
+    private OriginTransactionMapper originTransactionMapper;
 
     public void starter(String[] args) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException,
             JobParametersInvalidException, JobRestartException {
@@ -131,7 +132,7 @@ public class BatchConfig {
     @Bean
     @StepScope
     public TransWriter TransWriter() {
-        return new TransWriter(chunkSize, transactionMapper);
+        return new TransWriter(chunkSize, transactionMapper, originTransactionMapper);
     }
 
 }

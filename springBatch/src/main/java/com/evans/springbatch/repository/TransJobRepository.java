@@ -3,6 +3,7 @@ package com.evans.springbatch.repository;
 import com.evans.springbatch.common.OriginTransaction;
 import com.evans.springbatch.common.Transaction;
 import com.evans.springbatch.job.JobListenerStep;
+import com.evans.springbatch.listener.TransJobExecutionListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,15 @@ public class TransJobRepository implements BatchJobRepository {
     private JobBuilderFactory jobBuilderFactory;
     @Resource
     private BatchStepRepository batchStepRepository;
+    @Resource
+    private TransJobExecutionListener transJobExecutionListener;
 
     @Override
     public Job getBatchJob() {
         JobListenerStep<OriginTransaction, Transaction> step = (JobListenerStep) batchStepRepository.getBatchStep();
         return jobBuilderFactory.get("TransSyncJob")
+                .listener(transJobExecutionListener)
                 .start(step.getSteps()[0])
-//                .next(step.getSteps()[1])
                 .build();
     }
 

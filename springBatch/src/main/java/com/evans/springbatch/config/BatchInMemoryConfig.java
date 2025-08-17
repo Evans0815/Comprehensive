@@ -26,7 +26,7 @@ public class BatchInMemoryConfig {
             protected JobRepository createJobRepository() throws Exception {
                 MapJobRepositoryFactoryBean factory = new MapJobRepositoryFactoryBean();
                 // 关联内存事务管理器
-                factory.setTransactionManager(transactionManager());
+                factory.setTransactionManager(inMemoryTransactionManager());
                 factory.afterPropertiesSet();
                 return factory.getObject();
             }
@@ -39,10 +39,13 @@ public class BatchInMemoryConfig {
         };
     }
 
-    // 配置无资源的事务管理器（内存模式专用）
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new ResourcelessTransactionManager();
+    /*
+     * 重命名事务管理器，避免与默认的 transactionManager 冲突
+     * 配置无资源的事务管理器（内存模式专用）
+     */
+    @Bean(name = "inMemoryTransactionManager")
+    public PlatformTransactionManager inMemoryTransactionManager() {
+        return new ResourcelessTransactionManager(); // 内存模式常用的事务管理器
     }
 
 }

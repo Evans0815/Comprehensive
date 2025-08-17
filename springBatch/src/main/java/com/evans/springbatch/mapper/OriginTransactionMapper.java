@@ -1,6 +1,7 @@
 package com.evans.springbatch.mapper;
 
 import com.evans.springbatch.common.OriginTransaction;
+import com.evans.springbatch.common.Transaction;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface OriginTransactionMapper {
     List<OriginTransaction> queryTrans();
 
     int batchInsert(List<OriginTransaction> list);
+
+    int updateSyncFlag(List<? extends Transaction> list, int syncFlag);
 
 }

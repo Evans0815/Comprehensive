@@ -6,20 +6,14 @@ spring:
     url: jdbc:mysql://localhost:3306/db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     username: root
     password: root
-  main:
-    allow-bean-definition-overriding: true  # 允许Bean覆盖
   # 批处理作业配置
   batch:
     job:
       enabled: true  # 启动时自动执行作业
-    timeout: 30 # 请求数据库的超时时间，单位秒
     chunk-size: 100
-
-
 
 mybatis-plus:
   type-aliases-package: com.evans.springbatch.common
   mapper-locations: classpath:com.evans.springbatch/mapper/*Mapper.xml
   check-config-location: true
-
 
