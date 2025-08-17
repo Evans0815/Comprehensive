@@ -2,6 +2,7 @@ package com.evans.springbatch.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.evans.springbatch.common.OriginTransaction;
+import com.evans.springbatch.mapper.TransactionMapper;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
@@ -48,6 +49,8 @@ public class BatchConfig {
     private JobLauncher jobLauncher;
     @Resource
     private BatchJobRepository batchJobRepository;
+    @Resource
+    private TransactionMapper transactionMapper;
 
     public void starter(String[] args) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException,
             JobParametersInvalidException, JobRestartException {
@@ -91,7 +94,10 @@ public class BatchConfig {
         try {
             reader.afterPropertiesSet();
         } catch (Exception e) {
-            throw new RuntimeException("初始化JdbcPagingItemReader失败", e);
+            // 查询失败时，主动抛出异常终止批处理
+            String errorInfo = "初始化JdbcPagingItemReader失败";
+            log.error(errorInfo);
+            throw new RuntimeException(errorInfo, e);
         }
 
         return reader;
@@ -125,7 +131,7 @@ public class BatchConfig {
     @Bean
     @StepScope
     public TransWriter TransWriter() {
-        return new TransWriter();
+        return new TransWriter(chunkSize, transactionMapper);
     }
 
 }

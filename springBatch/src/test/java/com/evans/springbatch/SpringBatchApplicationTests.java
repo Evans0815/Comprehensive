@@ -13,7 +13,7 @@ import java.util.*;
 class SpringBatchApplicationTests {
 
     @Resource
-    private OriginTransactionMapper transactionMapper;
+    private OriginTransactionMapper originTransactionMapper;
 
     @Test
     void contextLoads() {
@@ -22,7 +22,7 @@ class SpringBatchApplicationTests {
 
     @Test
     void batchInsert() {
-        int c = 3;
+        int c = 80;
         Random random = new Random();
         List<OriginTransaction> list = new ArrayList<>();
         for (int i = 0; i < c; i++) {
@@ -32,7 +32,8 @@ class SpringBatchApplicationTests {
             originTrans.setAmount(BigDecimal.valueOf(random.nextInt(100) + 1));
             list.add(originTrans);
         }
-        transactionMapper.batchInsert(list);
+        int i = originTransactionMapper.batchInsert(list);
+        System.out.println("成功写入条数:" + i);
     }
 
 }

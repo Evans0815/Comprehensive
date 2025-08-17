@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.evans.springbatch.mapper.TransactionMapper">
+
+    <resultMap id="beans" type="OriginTransaction">
+        <id property="transId" column="trans_id" />
+        <result property="orderNo" column="order_no" />
+        <result property="amount" column="amount" />
+        <result property="transTime" column="trans_time" />
+    </resultMap>
+
+    <insert id="batchInsert">
+        INSERT INTO transaction(order_no, amount, trans_time)
+        VALUES
+        <foreach collection="list" item="trans" separator=",">
+            (#{trans.orderNo}, #{trans.amount}, #{trans.transTime})
+        </foreach>
+    </insert>
+
+</mapper>

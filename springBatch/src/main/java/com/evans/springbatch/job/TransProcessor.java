@@ -12,7 +12,6 @@ import org.springframework.batch.item.ItemProcessor;
 public class TransProcessor implements ItemProcessor<OriginTransaction, Transaction> {
     @Override
     public Transaction process(final OriginTransaction originTrans) throws Exception {
-        System.out.println("process");
         return TransConvert.INSTANCES.toTransaction(originTrans);
     }
 
